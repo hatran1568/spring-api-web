@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/error")
 public class ErrorController extends AbstractController<CustomerService> {
-    @GetMapping(value = "/system-error")
+    @GetMapping(value = "")
     public ModelAndView getUsers(HttpServletRequest httpServletRequest) {
         return new ModelAndView("error-page");
     }
