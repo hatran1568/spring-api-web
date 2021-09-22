@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface CustomerService {
     Optional<List<CustomerResponse>> getCustomers(HttpServletRequest httpServletRequest);
-    Optional<CustomerResponse> getById(HttpServletRequest httpServletRequest, int id);
-    void add(HttpServletRequest httpServletRequest, CustomerRequest customerRequest);
-    void updateById(HttpServletRequest httpServletRequest, int customerId, CustomerRequest customerRequest);
-    void deleteById(HttpServletRequest httpServletRequest, int customerId);
+    Optional<CustomerResponse> getById(HttpServletRequest httpServletRequest, String id);
+    Optional<CustomerResponse> add(HttpServletRequest httpServletRequest, CustomerRequest customerRequest);
+    Optional<CustomerResponse> updateById(HttpServletRequest httpServletRequest, String customerId, CustomerRequest customerRequest);
+    void deleteById(HttpServletRequest httpServletRequest, String customerId);
 }

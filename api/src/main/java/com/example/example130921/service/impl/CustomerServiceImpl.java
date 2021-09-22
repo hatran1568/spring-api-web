@@ -42,23 +42,25 @@ public class CustomerServiceImpl extends AbstractService implements CustomerServ
     }
 
     @Override
-    public void add(CustomerRequest customerRequest) {
+    public Optional<CustomerResponse> add(CustomerRequest customerRequest) {
         String message = validator.validateRequestThenReturnMessage(customerRequest);
         if (!ObjectUtils.isEmpty(message)) {
             throw new RequestParamInvalidException(message);
         }
 
         customerRepository.add(objectMapper.convertValue(customerRequest, Customer.class));
+        return Optional.of(objectMapper.convertValue(customerRequest, CustomerResponse.class));
     }
 
     @Override
-    public void updateById(int customerId, CustomerRequest customerRequest) {
+    public Optional<CustomerResponse> updateById(int customerId, CustomerRequest customerRequest) {
         String message = validator.validateRequestThenReturnMessage(customerRequest);
         if (!ObjectUtils.isEmpty(message)) {
             throw new RequestParamInvalidException(message);
         }
 
         customerRepository.updateById(customerId, objectMapper.convertValue(customerRequest, Customer.class));
+        return Optional.of(objectMapper.convertValue(customerRequest, CustomerResponse.class));
     }
 
     @Override

@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface CustomerService {
     Optional<List<CustomerResponse>> getCustomers();
     Optional<CustomerResponse> getById(int id);
-    void add(CustomerRequest customerRequest);
-    void updateById(int customerId, CustomerRequest customerRequest);
+    Optional<CustomerResponse> add(CustomerRequest customerRequest);
+    Optional<CustomerResponse> updateById(int customerId, CustomerRequest customerRequest);
     void deleteById(int customerId);
     boolean isValidId(int customerId);
 }

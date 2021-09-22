@@ -2,9 +2,13 @@ package com.example.web.service.impl;
 
 import com.example.web.dto.request.CustomerRequest;
 import com.example.web.dto.response.CustomerResponse;
+import com.example.web.exception.RequestParamInvalidException;
 import com.example.web.service.AbstractService;
 import com.example.web.service.CustomerService;
+import com.example.web.utils.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -26,10 +30,32 @@ public class CustomerServiceImpl extends AbstractService implements CustomerServ
     }
 
     @Override
-    public Optional<CustomerResponse> getById(HttpServletRequest httpServletRequest, int id) {
-
+    public Optional<CustomerResponse> getById(HttpServletRequest httpServletRequest, String id) {
+        if (!StringUtils.isNumeric(id)){
+            throw new RequestParamInvalidException("Request id invalid: " + id);
+        }
         CustomerResponse response = apiExchangeService.get(httpServletRequest,
-                                                        apiExchangeService.createURL(backApiUrl, "customers","{id}"),
+                apiExchangeService.createURL(backApiUrl, "customers", id),
+                CustomerResponse.class);
+
+        if (response == null) {
+            return Optional.empty();
+        }
+        return Optional.of(response);
+    }
+
+    @Override
+    public Optional<CustomerResponse> add(HttpServletRequest httpServletRequest, CustomerRequest request) {
+        if (request == null) {
+            throw new RequestParamInvalidException("request parameter can not be null");
+        }
+        String message = validator.validateRequestThenReturnMessage(request);
+        if (!ObjectUtils.isEmpty(message)) {
+            throw new RequestParamInvalidException(message);
+        }
+        CustomerResponse response = apiExchangeService.post(httpServletRequest,
+                                                    backApiUrl + "/customers",
+                                                        request,
                                                         CustomerResponse.class);
         if (response == null) {
             return Optional.empty();
@@ -38,17 +64,12 @@ public class CustomerServiceImpl extends AbstractService implements CustomerServ
     }
 
     @Override
-    public void add(HttpServletRequest httpServletRequest, CustomerRequest customerRequest) {
-
+    public Optional<CustomerResponse> updateById(HttpServletRequest httpServletRequest, String customerId, CustomerRequest customerRequest) {
+        return Optional.empty();
     }
 
     @Override
-    public void updateById(HttpServletRequest httpServletRequest, int customerId, CustomerRequest customerRequest) {
-
-    }
-
-    @Override
-    public void deleteById(HttpServletRequest httpServletRequest, int customerId) {
+    public void deleteById(HttpServletRequest httpServletRequest, String customerId) {
 
     }
 }

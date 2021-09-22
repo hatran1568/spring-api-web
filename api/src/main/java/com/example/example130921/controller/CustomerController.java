@@ -36,7 +36,7 @@ public class CustomerController extends AbstractController<CustomerService>{
     }
 
     @PostMapping("")
-    public void add(@RequestBody CustomerRequest customerRequest){
-        service.add(customerRequest);
+    public ResponseEntity<?> add(@RequestBody CustomerRequest customerRequest){
+        return response(service.add(customerRequest));
     }
 }
