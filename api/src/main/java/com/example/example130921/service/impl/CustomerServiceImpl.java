@@ -64,8 +64,12 @@ public class CustomerServiceImpl extends AbstractService implements CustomerServ
     }
 
     @Override
-    public void deleteById(int customerId) {
+    public Optional<CustomerResponse> deleteById(int customerId) {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> {
+            throw new ResourceNotFoundException();
+        });
         customerRepository.deleteById(customerId);
+        return Optional.of(objectMapper.convertValue(customer, CustomerResponse.class));
     }
 
     @Override

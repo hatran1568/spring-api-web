@@ -12,5 +12,5 @@ public interface CustomerService {
     Optional<CustomerResponse> getById(HttpServletRequest httpServletRequest, String id);
     Optional<CustomerResponse> add(HttpServletRequest httpServletRequest, CustomerRequest customerRequest);
     Optional<CustomerResponse> updateById(HttpServletRequest httpServletRequest, String customerId, CustomerRequest customerRequest);
-    void deleteById(HttpServletRequest httpServletRequest, String customerId);
+    Optional<CustomerResponse> deleteById(HttpServletRequest httpServletRequest, String customerId);
 }

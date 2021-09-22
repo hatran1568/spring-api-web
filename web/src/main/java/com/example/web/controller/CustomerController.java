@@ -65,10 +65,23 @@ public class CustomerController extends AbstractController<CustomerService>{
     }
 
     @PostMapping("/update/{id}")
-    public ModelAndView updateCustomer(HttpServletRequest httpServletRequest, @PathVariable int id){
+    public ModelAndView updateCustomer(HttpServletRequest httpServletRequest, @PathVariable String id){
         CustomerRequest customerRequest = new CustomerRequest(httpServletRequest.getParameter("customerName"),
                 httpServletRequest.getParameter("phone"));
+        Optional<CustomerResponse> response = service.updateById(httpServletRequest, id, customerRequest);
 
+        if (response.isEmpty()) {
+            return new ModelAndView("redirect:/error");
+        }
+        return new ModelAndView("redirect:/customers");
+    }
+
+    @GetMapping("/delete/{id}")
+    public ModelAndView deleteCustomer(HttpServletRequest httpServletRequest, @PathVariable String id){
+        Optional<CustomerResponse> response = service.deleteById(httpServletRequest, id);
+        if (response.isEmpty()) {
+            return new ModelAndView("redirect:/error");
+        }
         return new ModelAndView("redirect:/customers");
     }
 }

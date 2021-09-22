@@ -12,6 +12,6 @@ public interface CustomerService {
     Optional<CustomerResponse> getById(int id);
     Optional<CustomerResponse> add(CustomerRequest customerRequest);
     Optional<CustomerResponse> updateById(int customerId, CustomerRequest customerRequest);
-    void deleteById(int customerId);
+    Optional<CustomerResponse> deleteById(int customerId);
     boolean isValidId(int customerId);
 }

@@ -213,7 +213,7 @@ public class ApiExchangeService {
      * @param <T>         type T
      * @return ResponseEntity object as type T
      */
-    private <T> ResponseEntity<T> delete(HttpServletRequest httpRequest, String url, Object request, Class<T> classType) {
+    public <T> ResponseEntity<T> delete(HttpServletRequest httpRequest, String url, Object request, Class<T> classType) {
         HttpEntity<Object> requestEntity = createEntity(httpRequest, request);
         try {
             ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, classType);
