@@ -2,6 +2,7 @@ package com.example.example130921.service.impl;
 
 import com.example.example130921.dao.entity.Customer;
 import com.example.example130921.dao.repository.CustomerRepository;
+import com.example.example130921.dto.request.CustomerRequest;
 import com.example.example130921.dto.response.CustomerResponse;
 import com.example.example130921.service.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,11 +25,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class CustomerServiceImplTest {
 
-    @MockBean
+    @Mock
     private CustomerRepository customerRepository;
 
     @InjectMocks
@@ -43,8 +43,7 @@ public class CustomerServiceImplTest {
         Customer customer2 = new Customer(2, "bbb", "012345", null, null, false);
         Optional<List<Customer>> expectedCustomerList = Optional.of(Arrays.asList(customer1,customer2));
 
-        Mockito.doReturn(expectedCustomerList).when(customerRepository).getAllCustomers();
-
+        Mockito.when(customerRepository.getAllCustomers()).thenReturn(expectedCustomerList);
         Optional<List<CustomerResponse>> customers = customerService.getCustomers();
 
         assertEquals(customers.get().size(), expectedCustomerList.get().size());
@@ -55,24 +54,37 @@ public class CustomerServiceImplTest {
     @Test
     void testGetByIdSuccess() {
         Customer customer1 = new Customer(1, "aaa", "012345", null, null, false);
-        Mockito.doReturn(Optional.of(customer1)).when(customerRepository).findById(1);
-
+        Mockito.when(customerRepository.findById(1)).thenReturn(Optional.of(customer1));
         Optional<CustomerResponse> customer = customerService.getById(1);
 
         assertTrue(customer.isPresent());
-        assertSame(customer.get(), objectMapper.convertValue(customer1, CustomerResponse.class));
+        assertEquals(customer.get(), objectMapper.convertValue(customer1, CustomerResponse.class));
     }
 
     @Test
-    void add() {
+    void testAdd() {
+        Customer customer1 = new Customer(1, "aaa", "012345", null, null, false);
+        Mockito.when(customerRepository.add(customer1)).thenReturn(customer1);
+
+        Optional<CustomerResponse> addedCustomer = customerService.add(objectMapper.convertValue(customer1, CustomerRequest.class));
+        assertTrue(addedCustomer.isPresent());
+        assertEquals(addedCustomer.get(), objectMapper.convertValue(customer1, CustomerResponse.class));
     }
 
     @Test
     void updateById() {
+
     }
 
     @Test
     void deleteById() {
+        Customer customer1 = new Customer(1, "aaa", "012345", null, null, false);
+        Mockito.when(customerRepository.deleteById(1)).thenReturn(customer1);
+
+        Optional<CustomerResponse> deletedCustomer = customerService.deleteById(1);
+
+        assertTrue(deletedCustomer.isPresent());
+        assertEquals(deletedCustomer.get(), objectMapper.convertValue(customer1, CustomerResponse.class));
     }
 
     @Test
