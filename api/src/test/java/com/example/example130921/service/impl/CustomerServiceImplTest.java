@@ -7,12 +7,15 @@ import com.example.example130921.service.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,13 +24,15 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class CustomerServiceImplTest {
 
-    @Mock
+    @MockBean
     private CustomerRepository customerRepository;
 
     @InjectMocks
-    private CustomerService customerService;
+    private CustomerServiceImpl customerService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -38,7 +43,7 @@ public class CustomerServiceImplTest {
         Customer customer2 = new Customer(2, "bbb", "012345", null, null, false);
         Optional<List<Customer>> expectedCustomerList = Optional.of(Arrays.asList(customer1,customer2));
 
-        Mockito.doReturn(expectedCustomerList).when(Mockito.mock(CustomerRepository.class)).getAllCustomers();
+        Mockito.doReturn(expectedCustomerList).when(customerRepository).getAllCustomers();
 
         Optional<List<CustomerResponse>> customers = customerService.getCustomers();
 
@@ -50,7 +55,7 @@ public class CustomerServiceImplTest {
     @Test
     void testGetByIdSuccess() {
         Customer customer1 = new Customer(1, "aaa", "012345", null, null, false);
-        Mockito.doReturn(Optional.of(customer1)).when(Mockito.mock(CustomerRepository.class)).findById(1);
+        Mockito.doReturn(Optional.of(customer1)).when(customerRepository).findById(1);
 
         Optional<CustomerResponse> customer = customerService.getById(1);
 
