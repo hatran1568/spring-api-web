@@ -16,10 +16,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * @author Tran Thi Nguyet Ha
+ * @since 09/22/2021
+ */
 @Service
 public class CustomerServiceImpl extends AbstractService implements CustomerService {
 
+    /**
+     *
+     * @param httpServletRequest
+     * @return
+     */
     @Override
     public Optional<List<CustomerResponse>> getCustomers(HttpServletRequest httpServletRequest) {
         CustomerResponse[] responses = apiExchangeService.get(httpServletRequest,

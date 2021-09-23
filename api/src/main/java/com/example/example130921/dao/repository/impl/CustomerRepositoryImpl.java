@@ -4,6 +4,8 @@ import com.example.example130921.dao.entity.Customer;
 import com.example.example130921.dao.repository.AbstractRepository;
 import com.example.example130921.dao.repository.CustomerRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -40,29 +42,33 @@ public class CustomerRepositoryImpl extends AbstractRepository implements Custom
     }
 
     @Override
-    public void add(Customer customer) {
+    public Customer add(Customer customer) {
         StringBuilder sql = new StringBuilder();
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         sql.append("INSERT INTO ").append(getSimpleNameTable(Customer.class));
         sql.append("(customer_name, phone) VALUES(?, ?)");
-        jdbcTemplate.update(sql.toString(), new Object[]{customer.getCustomerName(), customer.getPhone()});
+        jdbcTemplate.update(sql.toString(), new Object[]{customer.getCustomerName(), customer.getPhone()}, keyHolder);
+        return findById(keyHolder.getKey().intValue()).get();
     }
 
     @Override
-    public void updateById(int id, Customer customer) {
+    public Customer updateById(int id, Customer customer) {
         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE ").append(getSimpleNameTable(Customer.class));
         sql.append(" SET customer_name = ?, phone = ?");
         sql.append(" WHERE customer_id = ?");
         jdbcTemplate.update(sql.toString(), new Object[]{customer.getCustomerName(), customer.getPhone(), id});
+        return findById(id).get();
     }
 
     @Override
-    public void deleteById(int id) {
+    public Customer deleteById(int id) {
         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE ").append(getSimpleNameTable(Customer.class));
         sql.append(" SET is_deleted = 1");
         sql.append(" WHERE customer_id = ?");
         jdbcTemplate.update(sql.toString(), id);
+        return findById(id).get();
     }
 
 

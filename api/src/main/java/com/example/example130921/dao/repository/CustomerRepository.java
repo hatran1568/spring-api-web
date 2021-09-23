@@ -13,9 +13,9 @@ public interface CustomerRepository {
 
     Optional<List<Integer>> getIdList();
 
-    void add(Customer customer);
+    Customer add(Customer customer);
 
-    void updateById(int id, Customer customer);
+    Customer updateById(int id, Customer customer);
 
-    void deleteById(int id);
+    Customer deleteById(int id);
 }
