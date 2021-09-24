@@ -3,6 +3,7 @@ package com.example.example130921.exception.handler;
 import com.example.example130921.dto.response.ErrorResponse;
 import com.example.example130921.exception.ConstraintViolationException;
 import com.example.example130921.exception.RequestParamInvalidException;
+import com.example.example130921.exception.ResourceNotFoundException;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,5 +24,10 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({RequestParamInvalidException.class})
     public ResponseEntity<ErrorResponse> handleRequestParamInvalidException(RequestParamInvalidException e) {
         return new ResponseEntity<>(new ErrorResponse("E02", e.getMessage()), null, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("E03", e.getMessage()), null, HttpStatus.NOT_FOUND);
     }
 }
